@@ -1,0 +1,134 @@
+version: '3.9'
+services:
+  postgresdb:
+    image: postgres:17
+    ports:
+      - "5532:5432"
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: all_in_market
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      
+  zookeeper:
+    image: bitnami/zookeeper:3.9.3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: yes
+
+  kafka:
+    image: bitnami/kafka:3.9.0
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+      
+  kafdrop:
+    image: obsidiandynamics/kafdrop:4.1.0
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKER_CONNECT: kafka:9092
+    depends_on:
+      - kafka
+
+
+  config-service:
+    image: config-service
+    ports:
+      - "8070:8080"
+    restart: on-failure
+
+  discovery-service:
+    image: discovery-service
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-service
+    restart: on-failure
+
+  gateway-api:
+    image: gateway-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery-service
+    restart: on-failure
+    
+  user-service:
+    image: user-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - discovery-service
+      - kafka
+    restart: on-failure
+    
+  category-service:
+    image: category-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      - discovery-service
+      - kafka
+    restart: on-failure
+    
+  product-service:
+    image: product-service
+    ports:
+      - "8083:8080"
+    depends_on:
+      - discovery-service
+      - kafka
+    restart: on-failure
+        
+  cart-service:
+    image: cart-service
+    ports:
+      - "8084:8080"
+    depends_on:
+      - discovery-service
+    restart: on-failure
+    
+  order-service:
+    image: order-service
+    ports:
+      - "8085:8080"
+    depends_on:
+      - discovery-service
+      - kafka
+    restart: on-failure
+    
+  rating-service:
+    image: rating-service
+    ports:
+      - "8086:8080"
+    depends_on:
+      - discovery-service
+    restart: on-failure
+        
+  payment-service:
+    image: payment-service
+    ports:
+      - "8087:8080"
+    depends_on:
+      - discovery-service
+      - kafka
+    restart: on-failure
+    
+  notification-service:
+    image: notification-service
+    ports:
+      - "8088:8080"
+    depends_on:
+      - discovery-service
+      - kafka
+    restart: on-failure

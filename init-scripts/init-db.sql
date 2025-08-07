@@ -1,0 +1,79 @@
+CREATE DATABASE user_service_db;
+CREATE USER user_service WITH PASSWORD 'user_service';
+GRANT ALL PRIVILEGES ON DATABASE user_service_db TO user_service;
+ALTER DATABASE user_service_db OWNER TO user_service;
+ALTER SCHEMA public OWNER TO user_service;
+GRANT ALL ON SCHEMA public TO user_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO user_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO user_service;
+
+CREATE DATABASE category_service_db;
+CREATE USER category_service WITH PASSWORD 'category_service';
+GRANT ALL PRIVILEGES ON DATABASE category_service_db TO category_service;
+ALTER DATABASE category_service_db OWNER TO category_service;
+ALTER SCHEMA public OWNER TO category_service;
+GRANT ALL ON SCHEMA public TO category_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO category_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO category_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO category_service;
+
+CREATE DATABASE product_service_db;
+CREATE USER product_service WITH PASSWORD 'product_service';
+GRANT ALL PRIVILEGES ON DATABASE product_service_db TO product_service;
+ALTER DATABASE product_service_db OWNER TO product_service;
+ALTER SCHEMA public OWNER TO product_service;
+GRANT ALL ON SCHEMA public TO product_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO product_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO product_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO product_service;
+
+CREATE DATABASE cart_service_db;
+CREATE USER cart_service WITH PASSWORD 'cart_service';
+GRANT ALL PRIVILEGES ON DATABASE cart_service_db TO cart_service;
+ALTER DATABASE cart_service_db OWNER TO cart_service;
+ALTER SCHEMA public OWNER TO cart_service;
+GRANT ALL ON SCHEMA public TO cart_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO cart_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO cart_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO cart_service;
+
+CREATE DATABASE order_service_db;
+CREATE USER order_service WITH PASSWORD 'order_service';
+GRANT ALL PRIVILEGES ON DATABASE order_service_db TO order_service;
+ALTER DATABASE order_service_db OWNER TO order_service;
+ALTER SCHEMA public OWNER TO order_service;
+GRANT ALL ON SCHEMA public TO order_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO order_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO order_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO order_service;
+
+CREATE DATABASE rating_service_db;
+CREATE USER rating_service WITH PASSWORD 'rating_service';
+GRANT ALL PRIVILEGES ON DATABASE rating_service_db TO rating_service;
+ALTER DATABASE rating_service_db OWNER TO rating_service;
+ALTER SCHEMA public OWNER TO rating_service;
+GRANT ALL ON SCHEMA public TO rating_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO rating_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO rating_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO rating_service;
+
+CREATE DATABASE payment_service_db;
+CREATE USER payment_service WITH PASSWORD 'payment_service';
+GRANT ALL PRIVILEGES ON DATABASE payment_service_db TO payment_service;
+ALTER DATABASE payment_service_db OWNER TO payment_service;
+ALTER SCHEMA public OWNER TO payment_service;
+GRANT ALL ON SCHEMA public TO payment_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO payment_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO payment_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO payment_service;
+
+CREATE DATABASE notification_service_db;
+CREATE USER notification_service WITH PASSWORD 'notification_service';
+GRANT ALL PRIVILEGES ON DATABASE notification_service_db TO notification_service;
+ALTER DATABASE notification_service_db OWNER TO notification_service;
+ALTER SCHEMA public OWNER TO notification_service;
+GRANT ALL ON SCHEMA public TO notification_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO notification_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO notification_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO notification_service;
