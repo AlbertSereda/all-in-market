@@ -40,7 +40,6 @@ services:
     depends_on:
       - kafka
 
-
   config-service:
     image: config-service
     ports:
