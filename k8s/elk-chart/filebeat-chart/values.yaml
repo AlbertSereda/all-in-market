@@ -1,0 +1,84 @@
+enabled: false
+
+image:
+  repository: "elastic/filebeat"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+terminationGracePeriodSeconds: 30
+
+podSecurityContext: {}
+
+securityContext:
+  runAsUser: 0
+
+args: ["-c", "/etc/filebeat.yml", "-e"]
+
+env:
+  discovery.type: single-node
+
+service:
+  port: 9200
+  targetPort: 9200
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+volumeMounts:
+  - name: config
+    mountPath: /etc/filebeat.yml
+    subPath: filebeat.yml
+  - mountPath: /var/lib/docker/containers
+    name: varlibdockercontainers
+    readOnly: true
+  - mountPath: /var/log
+    name: varlog
+    readOnly: true
+
+volumes:
+  - name: config
+    configMap:
+      name: elk-filebeat
+      items:
+        - key: filebeat.yml
+          path: filebeat.yml
+  - name: varlog
+    hostPath:
+      path: /var/log
+  - hostPath:
+      path: /var/lib/docker/containers
+    name: varlibdockercontainers
+
+config:
+  filebeat.yml: |
+    filebeat.inputs:
+      - type: container
+        paths:
+          - /var/log/containers/*.log
+        processors:
+          - add_kubernetes_metadata:
+              in_cluster: true
+        ignore_older: 0
+        scan_frequency: 10s
+        tail_files: true
+        symlinks: true
+
+    output.elasticsearch:
+      hosts: ["http://elk-elasticsearch:9200"]
