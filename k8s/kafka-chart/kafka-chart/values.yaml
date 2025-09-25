@@ -1,0 +1,58 @@
+replicaCount: 1
+
+image:
+  repository: "bitnami/kafka"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: "default"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+env:
+  KAFKA_BROKER_ID: "1"
+  KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeper:2181"
+  KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-kafka:9092"
+  KAFKA_LISTENERS: "PLAINTEXT://:9092"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+
+service:
+  port:
+    port: 9092
+    targetPort: 9092
+    protocol: TCP
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+volumeMounts:
+  - name: kafka-data
+    mountPath: /bitnami/kafka
+
+volumes: []
+
+volumeClaimTemplates:
+  - metadata:
+      name: kafka-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 2Gi

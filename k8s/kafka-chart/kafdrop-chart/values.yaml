@@ -1,7 +1,7 @@
-replicaCount: 0
+replicaCount: 1
 
 image:
-  repository: "bitnami/kibana"
+  repository: "obsidiandynamics/kafdrop"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -21,12 +21,14 @@ podSecurityContext: {}
 securityContext: {}
 
 env:
-  ELASTICSEARCH_HOSTS: "http://elk-elasticsearch:9200"
+  KAFKA_BROKER_CONNECT: kafka-kafka:9092
 
 service:
-  port: 5601
-  targetPort: 5601
-  nodePort: 30561
+  port:
+    port: 9000
+    targetPort: 9000
+    name: http-kafdrop
+    protocol: TCP
   type: NodePort
 
 resources:
@@ -45,12 +47,13 @@ ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: kibana.example.com
+    - host: all-in-service.kafdrop.local
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: elk-kibana
-              port: 5601
+              name: kafka-kafdrop
+              port:
+                name: http-kafdrop
   tls: []
