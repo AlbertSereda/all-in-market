@@ -1,0 +1,5 @@
+apiVersion: v2
+name: zookeeper
+type: application
+version: 0.1.0
+appVersion: "3.9.3"

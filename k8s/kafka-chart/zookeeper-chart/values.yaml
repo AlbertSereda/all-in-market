@@ -1,0 +1,56 @@
+replicaCount: 1
+
+image:
+  repository: "bitnami/zookeeper"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: "default"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+env:
+  ZOOKEEPER_CLIENT_PORT: "2181"
+  ZOOKEEPER_TICK_TIME: "2000"
+  ALLOW_ANONYMOUS_LOGIN: "yes"
+
+service:
+  port:
+    port: 2181
+    targetPort: 2181
+    protocol: TCP
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+volumeMounts:
+  - name: zookeeper-data
+    mountPath: /bitnami/zookeeper
+
+volumes: []
+
+volumeClaimTemplates:
+  - metadata:
+      name: zookeeper-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
