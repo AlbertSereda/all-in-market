@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana.fullname" . }}
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "grafana.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "grafana.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "grafana.serviceAccountName" . }}
+      containers:
+        - name: {{ include "grafana.name" . }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: {{ .Values.volume.datasources.name }}
+              mountPath: {{ .Values.volume.datasources.mountPath }}
+            - name: {{ .Values.volume.jvmDashboard.name }}
+              mountPath: {{ .Values.volume.jvmDashboard.mountPath }}
+            - name: {{ .Values.volume.dashboardsConfig.name }}
+              mountPath: {{ .Values.volume.dashboardsConfig.mountPath }}
+      volumes:
+        - name: {{ .Values.volume.datasources.name }}
+          configMap:
+            name: {{ include "grafana.configMapDatasources" . }}
+        - name: {{ .Values.volume.jvmDashboard.name }}
+          configMap:
+            name: {{ include "grafana.configMapJvmDashboard" . }}
+        - name: {{ .Values.volume.dashboardsConfig.name }}
+          configMap:
+            name: {{ include "grafana.configMapDashboard" . }}

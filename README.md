@@ -6,11 +6,14 @@ kubectl create configmap postgres-initdb-config --from-file=init-db.sql=./init-s
 Команда установки ELK helm:
 
 helm dependency build .\k8s\elk-chart\
-
 helm install elk .\k8s\elk-chart\ -n logging --create-namespace
 
 Команда установки Kafka helm:
 
 helm dependency build .\k8s\kafka-chart\
-
 helm install kafka .\k8s\kafka-chart\ -n kafka --create-namespace
+
+Команда установки Monitoring helm:
+
+helm dependency build .\k8s\monitoring-chart\
+helm install monitoring .\k8s\monitoring-chart\ -n monitoring --create-namespace

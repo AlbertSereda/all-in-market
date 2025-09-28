@@ -25,3 +25,4 @@
 /k8s/elk-chart/charts/
 /.idea/
 /k8s/kafka-chart/charts/
+/k8s/monitoring-chart/charts/

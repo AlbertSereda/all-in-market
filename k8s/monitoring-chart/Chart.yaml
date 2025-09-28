@@ -1,0 +1,11 @@
+apiVersion: v2
+name: monitoring
+version: 0.1.0
+
+dependencies:
+  - name: grafana
+    version: 0.1.0
+    repository: "file://grafana-chart"
+  - name: prometheus
+    version: 0.1.0
+    repository: "file://prometheus-chart"
