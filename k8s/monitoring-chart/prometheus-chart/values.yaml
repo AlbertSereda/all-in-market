@@ -1,0 +1,75 @@
+replicaCount: 1
+
+image:
+  repository: "bitnami/prometheus"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+clusterRole:
+  create: true
+  name: ""
+  rules:
+    - apiGroups: [ "" ]
+      resources:
+        - nodes
+        - nodes/proxy
+        - services
+        - endpoints
+        - pods
+      verbs: [ "get", "list", "watch" ]
+    - nonResourceURLs: [ "/metrics" ]
+      verbs: [ "get" ]
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+env: {}
+
+service:
+  port: 9090
+  targetPort: 9090
+  nodePort: 30090
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+volume:
+  prometheusConfig:
+    name: config
+    mountPath: /etc/prometheus
+
+prometheusConfig:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      - job_name: 'all-in-market'
+        metrics_path: '/actuator/prometheus'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: all-in-market
+
+args:
+  - "--config.file=/etc/prometheus/prometheus.yml"
