@@ -7,5 +7,5 @@ metadata:
 data:
 {{- range $key, $value := .Values.dashboardsConfig }}
   {{ $key }}: |
-{{ $value | nindent 4 }}
+{{ $value | nindent 2 }}
 {{- end }}
