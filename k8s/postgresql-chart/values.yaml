@@ -1,8 +1,60 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: init-sql-script
-data:
+replicaCount: 1
+
+image:
+  repository: "postgres"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: "default"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  port: 5432
+  targetPort: 5432
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+volume:
+  postgresData:
+    name: postgres-data
+    mountPath: /var/lib/postgresql/data
+  initScript:
+    name: init-script
+    mountPath: /docker-entrypoint-initdb.d/
+
+secretData:
+  user:
+    name: POSTGRES_USER
+    value: "postgres"
+  password:
+    name: POSTGRES_PASSWORD
+    value: "all_in_market"
+
+persistentVolumeClaim:
+  storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+
+configMapInitDb:
   init.sql: |
     CREATE DATABASE user_service_db;
     CREATE USER user_service WITH PASSWORD 'user_service';
@@ -13,7 +65,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO user_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO user_service;
-
+    
     CREATE DATABASE category_service_db;
     CREATE USER category_service WITH PASSWORD 'category_service';
     GRANT ALL PRIVILEGES ON DATABASE category_service_db TO category_service;
@@ -23,7 +75,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO category_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO category_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO category_service;
-
+    
     CREATE DATABASE product_service_db;
     CREATE USER product_service WITH PASSWORD 'product_service';
     GRANT ALL PRIVILEGES ON DATABASE product_service_db TO product_service;
@@ -33,7 +85,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO product_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO product_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO product_service;
-
+    
     CREATE DATABASE cart_service_db;
     CREATE USER cart_service WITH PASSWORD 'cart_service';
     GRANT ALL PRIVILEGES ON DATABASE cart_service_db TO cart_service;
@@ -43,7 +95,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO cart_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO cart_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO cart_service;
-
+    
     CREATE DATABASE order_service_db;
     CREATE USER order_service WITH PASSWORD 'order_service';
     GRANT ALL PRIVILEGES ON DATABASE order_service_db TO order_service;
@@ -53,7 +105,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO order_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO order_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO order_service;
-
+    
     CREATE DATABASE rating_service_db;
     CREATE USER rating_service WITH PASSWORD 'rating_service';
     GRANT ALL PRIVILEGES ON DATABASE rating_service_db TO rating_service;
@@ -63,7 +115,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO rating_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO rating_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO rating_service;
-
+    
     CREATE DATABASE payment_service_db;
     CREATE USER payment_service WITH PASSWORD 'payment_service';
     GRANT ALL PRIVILEGES ON DATABASE payment_service_db TO payment_service;
@@ -73,7 +125,7 @@ data:
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO payment_service;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO payment_service;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO payment_service;
-
+    
     CREATE DATABASE notification_service_db;
     CREATE USER notification_service WITH PASSWORD 'notification_service';
     GRANT ALL PRIVILEGES ON DATABASE notification_service_db TO notification_service;
